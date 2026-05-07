@@ -56,8 +56,8 @@ export default function LoginScreen() {
   }
 
   return (
-    <View>
-      <Text>Electroman</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Electroman</Text>
 
       <Controller
         control={control}
@@ -69,11 +69,12 @@ export default function LoginScreen() {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
+            style={styles.input}
           />
         )}
       />
       {errors.username && (
-        <Text>
+        <Text style={styles.fieldError}>
           {errors.username.message}
         </Text>
       )}
@@ -88,36 +89,39 @@ export default function LoginScreen() {
             onChangeText={onChange}
             value={value}
             autoCapitalize="none"
+            style={styles.input}
           />
         )}
       />
       {errors.password && (
-        <Text>
+        <Text style={styles.fieldError}>
           {errors.password.message}
         </Text>
       )}
 
       {errorMessage && (
-        <Text>
+        <Text style={styles.errorMessage}>
           {errorMessage}
         </Text>
       )}
 
       {successMessage && (
-        <Text>
+        <Text style={styles.successMessage}>
           {successMessage}
         </Text>
       )}
 
       <Button
         mode="contained"
-        onPress={handleSubmit(onLogin)}>
+        onPress={handleSubmit(onLogin)}
+        style={styles.button}>
         Login
       </Button>
 
       <Button
         mode="text"
-        onPress={() => router.push("/create-account")}>
+        onPress={() => router.push("/create-account")}
+        style={styles.button}>
         Create Account
       </Button>
     </View>
