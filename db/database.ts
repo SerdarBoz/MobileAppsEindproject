@@ -73,3 +73,25 @@ export function seedDatabase() {
     );
   });
 }
+
+export function getUserByCredentials(username: string, password: string): User | null {
+  const result = db.getFirstSync<any>(
+    `SELECT * FROM Users WHERE username = ? AND password = ?;`,
+    [username, password]
+  );
+
+  if (!result) return null;
+
+  return {
+    ...result,
+    birthdate: new Date(result.birthdate),
+  };
+}
+
+export function getUserById(id: number): User | null {
+  const result = db.getFirstSync<any>(
+    `SELECT * FROM Users WHERE id = ?;`,
+    [id]
+  );
+  return result ?? null;
+}
