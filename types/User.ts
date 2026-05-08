@@ -6,7 +6,7 @@ export type User = {
   password: string;
   birthdate: Date;
   municipality: string;
-  postalCode: string;
+  postalcode: string;
   street: string;
   houseNumber: string;
   box: string;

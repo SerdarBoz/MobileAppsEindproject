@@ -17,7 +17,7 @@ export function initDatabase() {
       password      TEXT NOT NULL,
       birthdate     TEXT NOT NULL,
       municipality  TEXT NOT NULL,
-      postalCode    TEXT NOT NULL,
+      postalcode    TEXT NOT NULL,
       street        TEXT NOT NULL,
       houseNumber   TEXT NOT NULL,
       box           TEXT
@@ -41,7 +41,7 @@ export function seedDatabase() {
   db.execSync(`DELETE FROM WorkOrders;`);
 
   db.runSync(
-    `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalCode, street, houseNumber, box) 
+    `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalcode, street, houseNumber, box) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
     [
       "Serdar",
@@ -94,4 +94,23 @@ export function getUserById(id: number): User | null {
     [id]
   );
   return result ?? null;
+}
+
+export function createUser(user: Omit<User, 'id'>): void {
+  db.runSync(
+    `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalCode, street, houseNumber, box) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
+    [
+      user.firstName,
+      user.lastName,
+      user.username,
+      user.password,
+      user.birthdate.toISOString(),
+      user.municipality,
+      user.postalcode,
+      user.street,
+      user.houseNumber,
+      user.box ?? ""
+    ]
+  );
 }

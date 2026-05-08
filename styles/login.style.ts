@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { success } from "zod";
 
 export const styles = StyleSheet.create({
   container: {

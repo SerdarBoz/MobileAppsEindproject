@@ -88,7 +88,7 @@ export default function LoginScreen() {
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            autoCapitalize="none"
+            secureTextEntry
             style={styles.input}
           />
         )}
