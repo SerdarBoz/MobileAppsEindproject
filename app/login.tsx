@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import { Button, TextInput, Text } from "react-native-paper";
 import { useForm, Controller } from "react-hook-form";
-import { set, z } from "zod";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { router } from "expo-router";
 import { getUserByCredentials } from "@/db/database";

@@ -16,7 +16,7 @@ export default function RootLayout() {
         <Stack.Screen name="login" />
         <Stack.Screen name="create-account" />
         <Stack.Screen name="overview" />
-        <Stack.Screen name="detail" />
+        <Stack.Screen name="detail/[id]" />
         <Stack.Screen name="new-workorder" />
       </Stack>
     </PaperProvider>

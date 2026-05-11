@@ -114,3 +114,74 @@ export function createUser(user: Omit<User, 'id'>): void {
     ]
   );
 }
+
+export function getAllWorkOrders(): WorkOrder[] {
+  const rows = db.getAllSync<any>(
+    `SELECT * FROM WorkOrders ORDER BY id ASC;`
+  );
+
+  return rows.map(row => ({
+    ...row,
+    processed: row.processed === 1,
+  }));
+}
+
+export function getWorkOrderById(id: number): WorkOrder | null {
+  const row = db.getFirstSync<any>(
+    `SELECT * FROM WorkOrder WHERE id = ?`,
+    [id]
+  );
+
+  if (!row) return null;
+
+  return {
+    ...row,
+    processed: row.processed === 1,
+  };
+}
+
+
+export function updateWorkOrder(id: number, repairInformation: string): void {
+  db.runSync(
+    `UPDATE WorkOrder 
+     SET processed = 1, repairInformation = ? 
+     WHERE id = ?`,
+    [repairInformation, id]
+  );
+}
+
+export function reopenWorkOrder(id: number): void {
+  db.runSync(
+    `UPDATE WorkOrder 
+     SET processed = 0, repairInformation = '' 
+     WHERE id = ?`,
+    [id]
+  );
+}
+
+export function workOrderExists(city: string, device: string, customerName: string): boolean {
+  const row = db.getFirstSync<{ count: number }>(
+    `SELECT COUNT(*) as count 
+     FROM WorkOrder 
+     WHERE city = ? AND device = ? AND customerName = ?`,
+    [city, device, customerName]
+  );
+
+  return (row?.count ?? 0) > 0;
+}
+
+export function createWorkOrder(
+  wo: Omit<WorkOrder, 'id' | 'processed' | 'repairInformation'>
+): void {
+  db.runSync(
+    `INSERT INTO WorkOrder (city, device, problemCode, customerName, processed, detailedProblemDescription, repairInformation)
+     VALUES (?, ?, ?, ?, 0, ?, '')`,
+    [
+      wo.city,
+      wo.device,
+      wo.problemCode,
+      wo.customerName,
+      wo.detailedProblemDescription
+    ]
+  );
+}
