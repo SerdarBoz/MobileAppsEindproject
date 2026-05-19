@@ -22,9 +22,12 @@ export default function DetailScreen() {
     useCallback(() => {
       const order = getWorkOrderById(Number(id));
       setWorkOrder(order);
-      setRepairInfo(order?.repairInformation ?? '');
-      repairInfoRef.current = order?.repairInformation ?? '';
-      setMode('view');
+
+      const info = order?.repairInformation ?? '';
+      setRepairInfo(info);
+      repairInfoRef.current = info;
+
+      setMode(order?.processed ? 'view' : 'edit');
       setErrorMessage(null);
       setIsReopened(false);
     }, [id])
@@ -54,21 +57,6 @@ export default function DetailScreen() {
       return;
     }
 
-    if (!workOrder.processed && mode === 'view') {
-      navigation.setOptions({
-        headerShown: true,
-        title: '',
-        headerBackVisible: true,
-        headerLeft: undefined,
-        headerRight: () => (
-          <Text style={styles.editButton} onPress={() => setMode('edit')}>
-            Edit
-          </Text>
-        ),
-      });
-      return;
-    }
-
     if (workOrder.processed && mode === 'view') {
       navigation.setOptions({
         headerShown: true,
@@ -89,7 +77,11 @@ export default function DetailScreen() {
     setRepairInfo(workOrder?.repairInformation ?? '');
     repairInfoRef.current = workOrder?.repairInformation ?? '';
     setErrorMessage(null);
-    setMode('view');
+
+    router.replace({
+      pathname: '/overview',
+      params: { userId },
+    });
   }
 
   function handleSave() {
