@@ -68,7 +68,7 @@ export function seedDatabase() {
   workOrders.forEach((workOrder) => {
     db.runSync(
       `INSERT INTO WorkOrder (city, device, problemCode, customerName, processed, detailedProblemDescription, repairInformation) 
-      VALUES (?, ?, ?, ?, 0, ?, ?);`,
+      VALUES (?, ?, ?, ?, ?, ?, ?);`,
       workOrder
     );
   });
