@@ -8,7 +8,7 @@ import { User } from '@/types/User';
 import { styles } from '@/styles/overview.style';
 
 export default function OverviewScreen() {
-  const [userId] = useLocalSearchParams<{ userId: string }>().userId;
+  const { userId } = useLocalSearchParams<{ userId: string }>();
   const navigation = useNavigation();
 
   const [user, setUser] = useState<User | null>(null);
@@ -37,23 +37,18 @@ export default function OverviewScreen() {
               params: { userId },
             })
           )}>
-          +
+          New
         </Button>
       ),
       headerRight: () => (
-        <Button
-          onPress={() => (
-            router.replace({
-              pathname: '/login',
-            })
-          )}>
+        <Button onPress={() => router.replace('/login')}>
           Logout
         </Button>
       ),
     });
   }, [navigation, userId]);
 
-  function renderWorkOrder({ item }: { item: WorkOrder }) {
+  function renderItem({ item }: { item: WorkOrder }) {
     return (
       <TouchableOpacity
         onPress={() =>
@@ -61,7 +56,8 @@ export default function OverviewScreen() {
             pathname: '/detail/[id]',
             params: { id: item.id, userId },
           })
-        }>
+        }
+      >
         <View style={styles.row}>
           <Text style={[styles.cell, styles.cellCity]}>{item.city}</Text>
           <Text style={[styles.cell, styles.cellDevice]}>{item.device}</Text>
@@ -82,26 +78,26 @@ export default function OverviewScreen() {
     <View style={styles.container}>
       {user && (
         <Text style={styles.welcome}>
-          Welcome, {user.firstName} {user.lastName}!
+          Welcome {user.firstName}, {user.lastName}
         </Text>
       )}
+
       <View style={[styles.row, styles.headerRow]}>
-        <Text style={[styles.cell, styles.cellCity]}>City</Text>
-        <Text style={[styles.cell, styles.cellDevice]}>Device</Text>
-        <Text style={[styles.cell, styles.cellCode]}>Problem Code</Text>
-        <Text style={[styles.cell, styles.cellName]}>Customer Name</Text>
-        <View style={[styles.cell, styles.cellProcessed]}>Processed</View>
+        <Text style={[styles.cell, styles.cellCity, styles.headerCell]}>City</Text>
+        <Text style={[styles.cell, styles.cellDevice, styles.headerCell]}>Device</Text>
+        <Text style={[styles.cell, styles.cellCode, styles.headerCell]}>Problem code</Text>
+        <Text style={[styles.cell, styles.cellName, styles.headerCell]}>Name</Text>
+        <Text style={[styles.cell, styles.cellProcessed, styles.headerCell]}>Processed</Text>
       </View>
 
       <FlatList
         data={workOrders}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={renderWorkOrder}
+        renderItem={renderItem}
         ListEmptyComponent={
           <Text style={styles.empty}>No work orders found.</Text>
         }
       />
-
-    </View >
+    </View>
   );
 }

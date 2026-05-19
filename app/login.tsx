@@ -1,22 +1,22 @@
-import { useState } from "react";
-import { View } from "react-native";
-import { Button, TextInput, Text } from "react-native-paper";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { router } from "expo-router";
-import { getUserByCredentials } from "@/db/database";
-import { styles } from "@/styles/login.style";
+import { useState } from 'react';
+import { View } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper';
+import { useForm, Controller } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { router } from 'expo-router';
+import { getUserByCredentials } from '@/db/database';
+import { styles } from '@/styles/login.style';
 
 const loginSchema = z.object({
-  username: z.string().min(1, { message: "Username is required" }),
-  password: z.string().min(1, { message: "Password is required" }),
+  username: z.string().min(1, { message: 'Username is required' }),
+  password: z.string().min(1, { message: 'Password is required' }),
 });
 
 type LoginFormData = {
   username: string;
   password: string;
-}
+};
 
 export default function LoginScreen() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -28,10 +28,7 @@ export default function LoginScreen() {
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
+    defaultValues: { username: '', password: '' },
   });
 
   function onLogin(data: LoginFormData) {
@@ -41,15 +38,15 @@ export default function LoginScreen() {
     const user = getUserByCredentials(data.username, data.password);
 
     if (!user) {
-      setErrorMessage("Invalid username or password");
+      setErrorMessage('Invalid username or password');
       return;
     }
 
-    setSuccessMessage(`Welcome, ${user.firstName}! ${user.lastName}`);
+    setSuccessMessage(`Welcome, ${user.firstName} ${user.lastName}!`);
 
     setTimeout(() => {
       router.replace({
-        pathname: "/overview",
+        pathname: '/overview',
         params: { userId: user.id },
       });
     }, 3000);
@@ -57,7 +54,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Electroman</Text>
+      <Text style={styles.title}>ElectroMan</Text>
 
       <Controller
         control={control}
@@ -74,9 +71,7 @@ export default function LoginScreen() {
         )}
       />
       {errors.username && (
-        <Text style={styles.fieldError}>
-          {errors.username.message}
-        </Text>
+        <Text style={styles.fieldError}>{errors.username.message}</Text>
       )}
 
       <Controller
@@ -106,9 +101,7 @@ export default function LoginScreen() {
       )}
 
       {successMessage && (
-        <Text style={styles.successMessage}>
-          {successMessage}
-        </Text>
+        <Text style={styles.successMessage}>{successMessage}</Text>
       )}
 
       <Button
@@ -120,7 +113,7 @@ export default function LoginScreen() {
 
       <Button
         mode="text"
-        onPress={() => router.push("/create-account")}
+        onPress={() => router.push('/create-account')}
         style={styles.button}>
         Create Account
       </Button>

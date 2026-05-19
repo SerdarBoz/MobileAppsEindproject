@@ -23,7 +23,7 @@ export function initDatabase() {
       box           TEXT
     );
 
-    CREATE TABLE IF NOT EXISTS WorkOrders (
+    CREATE TABLE IF NOT EXISTS WorkOrder (
       id                          INTEGER PRIMARY KEY AUTOINCREMENT,
       city                        TEXT NOT NULL,
       device                      TEXT NOT NULL,
@@ -38,7 +38,7 @@ export function initDatabase() {
 
 export function seedDatabase() {
   db.execSync(`DELETE FROM Users;`);
-  db.execSync(`DELETE FROM WorkOrders;`);
+  db.execSync(`DELETE FROM WorkOrder;`);
 
   db.runSync(
     `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalcode, street, houseNumber, box) 
@@ -67,7 +67,7 @@ export function seedDatabase() {
 
   workOrders.forEach((workOrder) => {
     db.runSync(
-      `INSERT INTO WorkOrders (city, device, problemCode, customerName, processed, detailedProblemDescription, repairInformation) 
+      `INSERT INTO WorkOrder (city, device, problemCode, customerName, processed, detailedProblemDescription, repairInformation) 
       VALUES (?, ?, ?, ?, 0, ?, ?);`,
       workOrder
     );
@@ -117,7 +117,7 @@ export function createUser(user: Omit<User, 'id'>): void {
 
 export function getAllWorkOrders(): WorkOrder[] {
   const rows = db.getAllSync<any>(
-    `SELECT * FROM WorkOrders ORDER BY id ASC;`
+    `SELECT * FROM WorkOrder ORDER BY id ASC;`
   );
 
   return rows.map(row => ({
