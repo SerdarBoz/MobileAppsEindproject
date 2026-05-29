@@ -98,7 +98,7 @@ export function getUserById(id: number): User | null {
 
 export function createUser(user: Omit<User, 'id'>): void {
   db.runSync(
-    `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalCode, street, houseNumber, box) 
+    `INSERT INTO Users (firstName, lastName, username, password, birthdate, municipality, postalcode, street, houseNumber, box) 
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
     [
       user.firstName,
